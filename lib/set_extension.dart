@@ -6,27 +6,29 @@ import 'package:ktflutter/pair_extension.dart';
 
 import 'string_extension.dart';
 
-class KFList<E> extends ListBase<E> {
+class KFSet<E> extends SetBase<E> {
     // base
-    List<E> _innerList = new List<E>();
-    int get length => _innerList.length;
-    set length(int length) => _innerList.length = length;
-    operator []=(int index, E value) => _innerList[index] = value;
-    E operator [](int index) => _innerList[index];
-    List<E> toFlutterList() => _innerList;
+    Set<E> _innerSet = new Set<E>();
+    int get length => _innerSet.length;
+    E lookup(Object element) => _innerSet.lookup(element);
+    bool add(E value) => _innerSet.add(value);
+    bool contains(Object element) => _innerSet.contains(element);
+    bool remove(Object value) => _innerSet.remove(value);
+    Iterator<E> get iterator => _innerSet.iterator;
+    Set<E> toSet() => _innerSet.toSet();
 
     // kotlin
-    KFList<E> also(void block(KFList<E> list)) {
+    KFSet<E> also(void block(KFSet<E> list)) {
         block(this);
         return this;
     }
-    R let<R>(R block(KFList<E> list)) => block(this);
-    KFList<E> takeIf(bool block(KFList<E> list)) => block(this) ? this : null;
-    KFList<E> takeUnless(bool block(KFList<E> list)) => !block(this) ? this : null;
+    R let<R>(R block(KFSet<E> list)) => block(this);
+    KFSet<E> takeIf(bool block(KFSet<E> list)) => block(this) ? this : null;
+    KFSet<E> takeUnless(bool block(KFSet<E> list)) => !block(this) ? this : null;
 
     // find
     E find(bool block(E obj)) {
-        for(var element in _innerList) {
+        for(var element in _innerSet) {
             if (block(element)) {
                 return element;
             }
@@ -37,8 +39,8 @@ class KFList<E> extends ListBase<E> {
     // findLast
     E findLast(bool block(E obj)) {
         for (int i = length - 1; i >= 0; i--) {
-            if (block(_innerList[i])) {
-                return _innerList[i];
+            if (block(_innerSet.elementAt(i))) {
+                return _innerSet.elementAt(i);
             }
         }
         return null;
@@ -48,7 +50,7 @@ class KFList<E> extends ListBase<E> {
     int indexOfFirst(bool block(E obj)) {
         var idx = -1;
         for (int i = 0; i < length; i++) {
-            if (block(_innerList[i])) {
+            if (block(_innerSet.elementAt(i))) {
                 idx = i;
                 break;
             }
@@ -60,7 +62,7 @@ class KFList<E> extends ListBase<E> {
     int indexOfLast(bool block(E obj)) {
         var idx = -1;
         for (int i = length - 1; i >= 0; i--) {
-            if (block(_innerList[i])) {
+            if (block(_innerSet.elementAt(i))) {
                 idx = i;
                 break;
             }
@@ -69,81 +71,87 @@ class KFList<E> extends ListBase<E> {
     }
 
     // drop
-    KFList<E> drop(int n) {
-        var ret = KFList<E>();
+    KFSet<E> drop(int n) {
+        var ret = KFSet<E>();
         for (int i = n; i < length; i++) {
-            ret.add(_innerList[i]);
+            ret.add(_innerSet.elementAt(i));
         }
         return ret;
     }
 
     // dropLast
-    KFList<E> dropLast(int n) {
-        var ret = KFList<E>();
+    KFSet<E> dropLast(int n) {
+        var ret = KFSet<E>();
         for (int i = 0; i < length - n; i++) {
-            ret.add(_innerList[i]);
+            ret.add(_innerSet.elementAt(i));
         }
         return ret;
     }
 
     // filter
-    KFList<E> filter(bool block(E obj)) {
-        var ret = KFList<E>();
+    KFSet<E> filter(bool block(E obj)) {
+        var ret = KFSet<E>();
         for (int i = 0; i < length; i++) {
-            if (block(_innerList[i])) ret.add(_innerList[i]);
+            if (block(_innerSet.elementAt(i))) ret.add(_innerSet.elementAt(i));
         }
         return ret;
     }
 
     // filterIndexed
-    KFList<E> filterIndexed(bool block(int idx, E obj)) {
-        var ret = KFList<E>();
+    KFSet<E> filterIndexed(bool block(int idx, E obj)) {
+        var ret = KFSet<E>();
         for (int i = 0; i < length; i++) {
-            if (block(i, _innerList[i])) ret.add(_innerList[i]);
+            if (block(i, _innerSet.elementAt(i))) ret.add(_innerSet.elementAt(i));
         }
         return ret;
     }
 
     // filterNot
-    KFList<E> filterNot(bool block(E obj)) {
-        var ret = KFList<E>();
+    KFSet<E> filterNot(bool block(E obj)) {
+        var ret = KFSet<E>();
         for (int i = 0; i < length; i++) {
-            if (!block(_innerList[i])) ret.add(_innerList[i]);
+            if (!block(_innerSet.elementAt(i))) ret.add(_innerSet.elementAt(i));
         }
         return ret;
     }
 
     // slice
-    KFList<E> slice(int startIdx, int endIdx) => listOf(_innerList.sublist(startIdx, endIdx));
+    KFSet<E> slice(int startIdx, int endIdx) {
+        var ret = KFSet<E>();
+        for (int i = startIdx; i < endIdx; i++) {
+            ret.add(_innerSet.elementAt(i));
+        }
+        return ret;
+    }
 
     // sortBy
-    KFList<E> sortBy(int block(E first, E second)) => klet<KFList<E>, KFList<E>>(listOf(_innerList), (tmp) {
-        tmp._innerList.sort(block);
-        return listOf(tmp);
+    KFSet<E> sortBy(int block(E first, E second)) => klet<KFSet<E>, KFSet<E>>(setOf(_innerSet), (tmp) {
+        tmp._innerSet.toList().sort(block);
+        return tmp;
     });
 
     // sortByDescending
-    KFList<E> sortByDescending(int block(E first, E second)) => klet<KFList<E>, KFList<E>>(listOf(_innerList), (tmp) {
-        tmp._innerList.sort(block);
-        return listOf(tmp.reversed.toList());
+    KFSet<E> sortByDescending(int block(E first, E second)) => klet<KFSet<E>, KFSet<E>>(setOf(_innerSet), (tmp) {
+        tmp._innerSet.toList().sort(block);
+        return setOf(tmp.toList().reversed);
     });
 
     // map/override
-    KFList<T> map<T>(T block(E obj)) => KFList<T>().also((it) => it.addAll(super.map(block)));
+    KFSet<T> map<T>(T block(E obj)) => KFSet<T>().also((it) => it.addAll(super.map(block)));
 
     // mapIndexed
-    KFList<T> mapIndexed<T>(T block(int idx, E obj)) {
-        var ret = KFList<T>();
+    KFSet<T> mapIndexed<T>(T block(int idx, E obj)) {
+        var ret = KFSet<T>();
         for (int i = 0; i < length; i++) {
-            ret.add(block(i, _innerList[i]));
+            ret.add(block(i, _innerSet.elementAt(i)));
         }
         return ret;
     }
 
     // distinct
-    KFList<E> distinct() {
-        var ret = KFList<E>();
-        for (var item in _innerList) {
+    KFSet<E> distinct() {
+        var ret = KFSet<E>();
+        for (var item in _innerSet) {
             if (!ret.contains(item)) {
                 ret.add(item);
             }
@@ -151,10 +159,10 @@ class KFList<E> extends ListBase<E> {
         return ret;
     }
     // distinctBy
-    KFList<E> distinctBy<K>(K block(E obj)) {
+    KFSet<E> distinctBy<K>(K block(E obj)) {
         var set = HashSet<K>();
-        var list = KFList<E>();
-        for (var e in _innerList) {
+        var list = KFSet<E>();
+        for (var e in _innerSet) {
             var key = block(e);
             if (set.add(key)) {
                 list.add(e);
@@ -165,8 +173,8 @@ class KFList<E> extends ListBase<E> {
 
     // all
     bool all(bool block(E obj)) {
-        if (_innerList.isEmpty) return false;
-        for (var item in _innerList) {
+        if (_innerSet.isEmpty) return false;
+        for (var item in _innerSet) {
             if (!block(item)) {
                 return false;
             }
@@ -175,8 +183,8 @@ class KFList<E> extends ListBase<E> {
     }
     // any
     bool any(bool block(E obj)) {
-        if (_innerList.isEmpty) return false;
-        for (var item in _innerList) {
+        if (_innerSet.isEmpty) return false;
+        for (var item in _innerSet) {
             if (block(item)) {
                 return true;
             }
@@ -187,7 +195,7 @@ class KFList<E> extends ListBase<E> {
     // count
     int count(bool block(E obj)) {
         var ret = 0;
-        for (var item in _innerList) {
+        for (var item in _innerSet) {
             if (block(item)) {
                 ret++;
             }
@@ -198,14 +206,14 @@ class KFList<E> extends ListBase<E> {
     // forEachIndexed/new
     forEachIndexed(void action(int index, E element)) {
         for (int i = 0; i < this.length; i++) {
-            action(i, this[i]);
+            action(i, this.elementAt(i));
         }
     }
 
     // none
     bool none(bool block(E obj)) {
-        if (_innerList.isEmpty) return true;
-        for (var item in _innerList) {
+        if (_innerSet.isEmpty) return true;
+        for (var item in _innerSet) {
             if (block(item)) {
                 return false;
             }
@@ -215,40 +223,40 @@ class KFList<E> extends ListBase<E> {
 
     // reduceIndexed
     E reduceIndexed(E oper(int idx, E acc, E s)) {
-        var accumulator = _innerList[0];
+        var accumulator = _innerSet.elementAt(0);
         for (int i = 1; i < length; i++) {
-            accumulator = oper(i, accumulator, _innerList[i]);
+            accumulator = oper(i, accumulator, _innerSet.elementAt(i));
         }
         return accumulator;
     }
 
     // minus
     minus(Object obj) {
-        var tmp = obj is List<E> ? obj : (obj is KFList<E> ? obj._innerList : null);
-        _innerList.removeWhere((it) => tmp.contains(it));
+        var tmp = obj is List<E> ? obj : (obj is KFSet<E> ? obj._innerSet: null);
+        _innerSet.removeWhere((it) => tmp.contains(it));
     }
 
     // joinToString
     KFString joinToString([String sep = ","]) {
         var str = "";
-        _innerList.forEach((it) => str += "$it$sep");
+        _innerSet.forEach((it) => str += "$it$sep");
         if (str.endsWith(sep)) {
             str = str.substring(0, str.length - sep.length);
         }
         return KFString(str);
     }
 
-    KFList<String> toStringList() {
-        var ret = KFList<String>();
-        for (var item in _innerList) {
+    KFSet<String> toStringList() {
+        var ret = KFSet<String>();
+        for (var item in _innerSet) {
             ret.add("$item");
         }
         return ret;
     }
     KFMap<K, V> toMap<K, V>() {
         var ret = KFMap<K, V>();
-        if (_innerList is List<KFPair<K, V>>) {
-            for (var item in _innerList) {
+        if (_innerSet is Set<KFPair<K, V>>) {
+            for (var item in _innerSet) {
                 var m = item as KFPair<K, V>;
                 ret[m.left] = m.right;
             }
@@ -257,4 +265,4 @@ class KFList<E> extends ListBase<E> {
     }
 }
 
-KFList<E> listOf<E>(Iterable<E> list) => KFList<E>().also((it) => it.addAll(list));
+KFSet<E> setOf<E>(Iterable<E> set) => KFSet<E>().also((it) => it.addAll(set));

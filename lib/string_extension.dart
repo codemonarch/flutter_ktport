@@ -55,6 +55,7 @@ class KFString {
     R let<R>(R block(KFString s)) => block(this);
     KFString takeIf(bool block(KFString s)) => block(this) ? this : null;
     KFString takeUnless(bool block(KFString s)) => !block(this) ? this : null;
+
     KFString substringBefore(Pattern pattern) => klet(indexOf(pattern), (idx) => idx == -1 ? this : substring(0, idx));
     KFString substringAfter(Pattern pattern) => klet(indexOf(pattern), (idx) => idx == -1 ? this : substring(idx + pattern.toString().length, length));
     KFString substringBeforeLast(Pattern pattern) => klet(lastIndexOf(pattern), (idx) => idx == -1 ? this : substring(0, idx));

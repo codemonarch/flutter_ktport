@@ -1,6 +1,10 @@
+@file:Suppress("DEPRECATION")
+
 package com.rarnu.ktflutter
 
 import android.content.Context
+import android.os.Build
+import android.provider.Settings
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.PluginRegistry
 
@@ -15,12 +19,23 @@ object KtflutterPlugin {
     @JvmStatic
     fun registerWith(registrar: PluginRegistry.Registrar) {
         MethodChannel(registrar.messenger(), channelName).setMethodCallHandler { call, result ->
-            val m = channelList[call.method]
-            if (m != null) {
-                val ret = m(registrar.context(), call.arguments as Map<String, Any?>)
-                result.success(if (ret is Unit) null else ret)
-            } else {
-                result.success(null)
+            when(call.method) {
+                "platform" -> result.success("Android")
+                "app_version_code" -> result.success(with(registrar.context()) { packageManager.getPackageInfo(packageName, 0).versionCode.toString() })
+                "app_version_name" -> result.success(with(registrar.context()) { packageManager.getPackageInfo(packageName, 0).versionName })
+                "app_package" -> result.success(registrar.context().packageName)
+                "device_version" -> result.success(Build.VERSION.SDK_INT.toString())
+                "device_model" -> result.success(Build.MODEL)
+                "device_id" -> result.success(Settings.Secure.getString(registrar.context().contentResolver, Settings.Secure.ANDROID_ID))
+                else -> {
+                    val m = channelList[call.method]
+                    if (m != null) {
+                        val ret = m(registrar.context(), call.arguments as Map<String, Any?>)
+                        result.success(if (ret is Unit) null else ret)
+                    } else {
+                        result.success(null)
+                    }
+                }
             }
         }
     }

@@ -11,12 +11,35 @@ public class SwiftKtflutterPlugin: NSObject, FlutterPlugin {
 
   	public static func register(with registrar: FlutterPluginRegistrar) {
 		FlutterMethodChannel.init(name: channelName, binaryMessenger: registrar.messenger()).setMethodCallHandler { (call, result) in
-            let m = channelList[call.method]
-            if (m != nil) {
-                result(m!(call.arguments as! [String: Any?]))
-            } else {
-                // error
-                result(nil)
+            switch(call.method) {
+            case "platform":
+                result("iOS");
+                break
+            case "app_version_code":
+                result(Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String)
+                break
+            case "app_version_name":
+                result(Bundle.main.infoDictionary!["CFBundleVersion"] as! String)
+                break
+            case "app_bundle":
+                result(Bundle.main.infoDictionary!["CFBundleIdentifier"] as! String)
+                break
+            case "device_version":
+                result(UIDevice.current.systemVersion)
+                break
+            case "device_model":
+                result(UIDevice.current.systemName)
+                break
+            case "device_id":
+                result(UIDevice.current.identifierForVendor?.uuidString)
+                break
+            default:
+                let m = channelList[call.method]
+                if (m != nil) {
+                    result(m!(call.arguments as! [String: Any?]))
+                } else {
+                    result(nil)
+                }
             }
         }
   	}
