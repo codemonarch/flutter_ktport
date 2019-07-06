@@ -163,6 +163,9 @@ class KFString {
     double toDouble() => double.parse(_innerString);
     bool toBool() => _innerString.toLowerCase() == "true";
 
+    // swift
+    KFString lastPathComponent() => substringAfterLast("/");
+
     // rarnu
     KFString toJsonEncoded() => replaceAll("\\", "\\\\").replaceAll("\n", "\\n").replaceAll("\"", "\\\"");
     KFString toTitleUpperCase() => substring(0, 1).toUpperCase() + substring(1);
