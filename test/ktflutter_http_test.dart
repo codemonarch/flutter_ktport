@@ -24,7 +24,12 @@ void main() {
     test('http DELETE', () async {
         await testDELETE();
     });
+
+    test('upload file', () async {
+        await testUploadFile();
+    });
 }
+
 
 Future<dynamic> testGET() async {
     return httpGet(
@@ -76,6 +81,23 @@ Future<dynamic> testDELETE() async {
     return http(
         'https://api.douban.com/v2/movie/top250?start=0&count=1&apikey=0b2bdeda43b5688921839c8ecb20399b',
         HttpMethod.DELETE,
+    ).then((HttpResponse response) {
+        print(response);
+    }).catchError((error) {
+        print(error);
+    });
+}
+
+Future<dynamic> testUploadFile() async {
+    return http(
+        'https://mc.hujiang.com', 
+        HttpMethod.POST,
+        postParam: {
+            'test': 'test1',
+        },
+        fileParam: {
+            'f1': '/Users/chenwang/Desktop/1.png',
+        }
     ).then((HttpResponse response) {
         print(response);
     }).catchError((error) {
