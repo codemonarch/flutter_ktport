@@ -173,8 +173,6 @@ class KFString {
 
     // toByteArray
     KFList<int> toIntList() => map((it) => it.codeUnitAt(0));
-    // swift
-    KFString lastPathComponent() => substringAfterLast("/");
 
     // swift
     KFString lastPathComponent() => substringAfterLast("/");
