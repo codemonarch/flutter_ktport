@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ktflutter/route_extension.dart';
 import 'package:ktflutter/global_extension.dart';
 import 'package:ktflutter/toast_extension.dart';
+import 'package:ktflutter/string_extension.dart';
 
 void main() => runApp(MainApp());
 
@@ -42,6 +43,9 @@ class _HomePageState extends State<HomePage> {
                             appPackage((p) => print("package => $p"));
                             route<String>("hello", { 'name': 'rarnu' }, (it) => print(it));
                             toast(context, "6666");
+                            var str = stringOf("abc");
+                            var senc = str.base64Encode();
+                            print(senc);
                         }
                     ),
                 ],

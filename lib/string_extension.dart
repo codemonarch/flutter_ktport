@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
-import 'list_extension.dart';
-import 'pair_extension.dart';
-import 'global_extension.dart';
+import 'package:ktflutter/list_extension.dart';
+import 'package:ktflutter/pair_extension.dart';
+import 'package:ktflutter/global_extension.dart';
 
 class KFString {
     // common
@@ -178,6 +178,10 @@ class KFString {
     // swift
     KFString lastPathComponent() => substringAfterLast("/");
 >>>>>>> feature/http_extension
+
+    // swift
+    KFString lastPathComponent() => substringAfterLast("/");
+    KFString getPathDirectory() => substringBeforeLast("/").let((it) => it._innerString == "" ? stringOf("/") : it);
 
     // rarnu
     KFString toJsonEncoded() => replaceAll("\\", "\\\\").replaceAll("\n", "\\n").replaceAll("\"", "\\\"");
