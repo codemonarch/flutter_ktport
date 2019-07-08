@@ -4,7 +4,7 @@ import 'package:ktflutter/global_extension.dart';
 import 'package:ktflutter/map_extension.dart';
 import 'package:ktflutter/pair_extension.dart';
 
-import 'string_extension.dart';
+import 'package:ktflutter/string_extension.dart';
 
 class KFList<E> extends ListBase<E> {
     // base

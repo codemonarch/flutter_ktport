@@ -4,7 +4,7 @@ import 'package:ktflutter/global_extension.dart';
 import 'package:ktflutter/map_extension.dart';
 import 'package:ktflutter/pair_extension.dart';
 
-import 'string_extension.dart';
+import 'package:ktflutter/string_extension.dart';
 
 class KFSet<E> extends SetBase<E> {
     // base
