@@ -176,7 +176,7 @@ class KFString {
 
     // swift
     KFString lastPathComponent() => substringAfterLast("/");
-    KFString getPathDirectory() => klet(substringBeforeLast("/"), (it) => it == "" ? "/" : it);
+    KFString getPathDirectory() => substringBeforeLast("/").let((it) => it._innerString == "" ? stringOf("/") : it);
 
     // rarnu
     KFString toJsonEncoded() => replaceAll("\\", "\\\\").replaceAll("\n", "\\n").replaceAll("\"", "\\\"");
