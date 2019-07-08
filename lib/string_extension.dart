@@ -174,6 +174,10 @@ class KFString {
     // toByteArray
     KFList<int> toIntList() => map((it) => it.codeUnitAt(0));
 
+    // swift
+    KFString lastPathComponent() => substringAfterLast("/");
+    KFString getPathDirectory() => klet(substringBeforeLast("/"), (it) => it == "" ? "/" : it);
+
     // rarnu
     KFString toJsonEncoded() => replaceAll("\\", "\\\\").replaceAll("\n", "\\n").replaceAll("\"", "\\\"");
     KFString toTitleUpperCase() => substring(0, 1).toUpperCase() + substring(1);
