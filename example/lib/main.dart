@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage> {
                     SizedButon(title: "Download Test", onPressed: (){
                         var imageurl = 'https://n1image.hjfile.cn/hjclass/public/upload/201712/8697783b-253e-4e2a-aecb-bd1561c35667.jpg';
                         deviceFilePath((path) {
-                            var savePath = "$path/${stringOf(imageurl).lastPathComponent()}";
+                            var savePath = "$path/${stringOf(imageurl).lastPathPart()}";
                             print("download_path => $savePath");
                             download(imageurl, savePath, (state, position, filesize, error) {
                                 if (state == DownloadState.Complete) {

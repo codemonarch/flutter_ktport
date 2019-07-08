@@ -135,7 +135,7 @@ void _assembleRequest(HttpClientRequest request, [String mimeType, Map<String, S
             file.forEach((uploadId, uploadFile) {
                 request.write('$BOUNDARY_STR$RANDOM_ID_STR\r\n');
                 var file = File(uploadFile);
-                var filename = stringOf(uploadFile).lastPathComponent();
+                var filename = stringOf(uploadFile).lastPathPart();
                 request.write('Content-Disposition: form-data; name=\"$uploadId\"; filename=\"$filename\"\r\nContent-Type: application/octet-stream\r\n\r\n');
                 request.write(file.readAsBytesSync());
                 request.write('\r\n');

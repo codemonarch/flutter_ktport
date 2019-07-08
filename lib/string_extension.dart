@@ -175,7 +175,7 @@ class KFString {
     KFList<int> toIntList() => map((it) => it.codeUnitAt(0));
 
     // swift
-    KFString lastPathComponent() => substringAfterLast("/");
+    KFString lastPathPart() => substringAfterLast("/");
     KFString getPathDirectory() => substringBeforeLast("/").let((it) => it._innerString == "" ? stringOf("/") : it);
 
     // rarnu
