@@ -166,7 +166,7 @@ class KFString {
 
     // ktor
     // base64encode
-    KFString base64Encode() => stringOf(base64.encode(utf8.encode(_innerString)));
+    KFString base64encode() => stringOf(base64.encode(utf8.encode(_innerString)));
 
     // base64decode
     KFString base64decode() => stringOf(utf8.decode(base64.decode(_innerString)));

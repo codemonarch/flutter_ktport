@@ -33,6 +33,39 @@ public class SwiftKtflutterPlugin: NSObject, FlutterPlugin {
             case "device_id":
                 result(UIDevice.current.identifierForVendor?.uuidString)
                 break
+            case "device_document_path":
+                let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.allDomainsMask, true)[0]
+                if (!FileManager.default.fileExists(atPath: path)) {
+                    do {
+                        try FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
+                    } catch {
+                        
+                    }
+                }
+                result(path)
+                break
+            case "device_file_path":
+                let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.allDomainsMask, true)[0] + "/files"
+                if (!FileManager.default.fileExists(atPath: path)) {
+                    do {
+                        try FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
+                    } catch {
+                        
+                    }
+                }
+                result(path)
+                break
+            case "device_cache_path":
+                let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.cachesDirectory, FileManager.SearchPathDomainMask.allDomainsMask, true)[0]
+                if (!FileManager.default.fileExists(atPath: path)) {
+                    do {
+                        try FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
+                    } catch {
+                        
+                    }
+                }
+                result(path)
+                break
             default:
                 let m = channelList[call.method]
                 if (m != nil) {

@@ -33,15 +33,34 @@ appVersionName(void block(String s)) async => block(await posix.invokeMethod<Str
 deviceVersion(void block(String s)) async => block(await posix.invokeMethod<String>("device_version", {}));
 deviceModel(void block(String s)) async => block(await posix.invokeMethod<String>("device_model", {}));
 deviceId(void block(String s)) async => block(await posix.invokeMethod<String>("device_id", {}));
+
 // ios only
-appBundle(void block(String s)) {
-    platform((p) async {
-        block(p == "iOS" ? (await posix.invokeMethod<String>("app_bundle", {})) : "");
-    });
-}
+appBundle(void block(String s)) => platform((p) async {
+    block(p == "iOS" ? (await posix.invokeMethod<String>("app_bundle", {})) : "");
+});
+
 // android only
-appPackage(void block(String s)) {
-    platform((p) async {
-        block(p == "Android" ? (await posix.invokeMethod<String>("app_package", {})) : "");
-    });
-}
+appPackage(void block(String s)) => platform((p) async {
+    block(p == "Android" ? (await posix.invokeMethod<String>("app_package", {})) : "");
+});
+
+deviceDocumentPath(void block(String path)) async => block(await posix.invokeMethod<String>("device_document_path", {}));
+deviceFilePath(void block(String path)) async => block(await posix.invokeMethod<String>("device_file_path", {}));
+deviceCachePath(void block(String path)) async => block(await posix.invokeMethod<String>("device_cache_path", {}));
+
+// android only
+deviceExternalPath(void block(String path)) => platform((p) async {
+    block(p == "Android" ? (await posix.invokeMethod<String>("device_external_path", {})) : "");
+});
+deviceExternalDocumentPath(void block(String path)) => platform((p) async {
+    block(p == "Android" ? (await posix.invokeMethod<String>("device_external_document_path", {})) : "");
+});
+deviceExternalFilePath(void block(String path)) => platform((p) async {
+    block(p == "Android" ? (await posix.invokeMethod<String>("device_external_file_path", {})) : "");
+});
+deviceExternalCachePath(void block(String path)) => platform((p) async {
+    block(p == "Android" ? (await posix.invokeMethod<String>("device_external_cache_path", {})) : "");
+});
+deviceObbPath(void block(String path)) => platform((p) async {
+    block(p == "Android" ? (await posix.invokeMethod<String>("device_obb_path", {})) : "");
+});
