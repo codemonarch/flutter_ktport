@@ -3,6 +3,7 @@ import 'package:ktflutter/route_extension.dart';
 import 'package:ktflutter/global_extension.dart';
 import 'package:ktflutter/toast_extension.dart';
 import 'package:ktflutter/string_extension.dart';
+import 'package:ktflutter/download_util.dart';
 
 void main() => runApp(MainApp());
 
@@ -48,6 +49,15 @@ class _HomePageState extends State<HomePage> {
                             print(senc);
                         }
                     ),
+                    RaisedButton(
+                      child: Text('Download Test'),
+                      onPressed: () {
+                          download(
+                              'https://n1image.hjfile.cn/hjclass/public/upload/201712/8697783b-253e-4e2a-aecb-bd1561c35667.jpg', 
+                              '/Users/chenwang/Desktop/test_download/8697783b-253e-4e2a-aecb-bd1561c35667.jpg', (DownloadState state, int position, int filesize, String error) {
+                                print('$state, $position, $filesize, $error');
+                            });
+                      })
                 ],
             ),
         ),

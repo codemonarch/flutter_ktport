@@ -39,9 +39,13 @@ Future<bool> download(String url, String localFile, DownloadCallback callback) a
         int position = 0;
         response.listen((data) {
             int count = data.length;
-            fileOut.writeAsBytesSync(data);
-            position += count;
-            if (callback != null) callback(DownloadState.Progress, position, filesize, null);
+            try {
+                fileOut.writeAsBytesSync(data, mode: FileMode.append);
+                position += count;
+                if (callback != null) callback(DownloadState.Progress, position, filesize, null);
+            } on Exception catch (exeption) {
+                if (callback != null) callback(DownloadState.Error, 0, 0, exeption.toString());
+            }
         }, onDone: () {
             fileOut.renameSync(localFile);
             callback(DownloadState.Complete, 0, filesize, null);
@@ -58,9 +62,6 @@ Future<bool> download(String url, String localFile, DownloadCallback callback) a
         print(exception);
         isDownloadSuccess = false;
         if (callback != null) callback(DownloadState.Error, 0, 0, exception.toString());
-    }
-    if (!isDownloadSuccess) {
-        await fTmp.delete();
     }
     return isDownloadSuccess;
 }

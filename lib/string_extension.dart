@@ -164,7 +164,6 @@ class KFString {
     double toDouble() => double.parse(_innerString);
     bool toBool() => _innerString.toLowerCase() == "true";
 
-<<<<<<< HEAD
     // ktor
     // base64encode
     KFString base64Encode() => stringOf(base64.encode(utf8.encode(_innerString)));
@@ -174,10 +173,8 @@ class KFString {
 
     // toByteArray
     KFList<int> toIntList() => map((it) => it.codeUnitAt(0));
-=======
     // swift
     KFString lastPathComponent() => substringAfterLast("/");
->>>>>>> feature/http_extension
 
     // swift
     KFString lastPathComponent() => substringAfterLast("/");
