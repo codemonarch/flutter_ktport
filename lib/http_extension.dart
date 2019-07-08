@@ -2,6 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
+import 'package:ktflutter/map_extension.dart';
+import 'package:ktflutter/string_extension.dart';
+
 enum HttpMethod { GET, HEAD, POST, PUT, DELETE }
 
 // http response
@@ -30,7 +34,7 @@ class HttpError extends Error {
 }
 
 // common http 
-Future<HttpResponse> http(String url, 
+Future<HttpResponse> http(String url,
                 HttpMethod method, 
                 {Map<String, String> param,
                 String mimeType='application/json',
@@ -44,14 +48,11 @@ Future<HttpResponse> http(String url,
 
     try {
         HttpClient client = HttpClient();
-        client.connectionTimeout = Duration(seconds: timeout); 
-
+        client.connectionTimeout = Duration(seconds: timeout);
         HttpClientRequest request = await _buildRequest(client, uri, method);
-
         _assembleRequest(request, mimeType, headers, body, postParam, fileParam);
-        
         HttpClientResponse response = await request.close();
-        String result = await response.transform(utf8.decoder).join();
+        var result = await response.transform(utf8.decoder).join();
         return HttpResponse(response.statusCode, result);
     } on Error catch (error) {
         throw HttpError(-1, error.toString());
@@ -124,9 +125,7 @@ void _assembleRequest(HttpClientRequest request, [String mimeType, Map<String, S
         if (file != null) { // upload file
             const BOUNDARY_STR = "--";
             const RANDOM_ID_STR = "_hjreq_";
-            
             request.headers.contentType = ContentType.parse('multipart/form-data; boundary=$RANDOM_ID_STR');
-
             if (param != null) {
                 param.forEach((k, v) {
                     request.write('$BOUNDARY_STR$RANDOM_ID_STR\r\n');
@@ -136,8 +135,8 @@ void _assembleRequest(HttpClientRequest request, [String mimeType, Map<String, S
             }
             file.forEach((uploadId, uploadFile) {
                 request.write('$BOUNDARY_STR$RANDOM_ID_STR\r\n');
-                File file = File(uploadFile);
-                String filename = uploadFile.split(new RegExp(r"[/|\\]")).last;
+                var file = File(uploadFile);
+                var filename = stringOf(uploadFile).lastPathComponent();
                 request.write('Content-Disposition: form-data; name=\"$uploadId\"; filename=\"$filename\"\r\nContent-Type: application/octet-stream\r\n\r\n');
                 request.write(file.readAsBytesSync());
                 request.write('\r\n');
@@ -152,23 +151,7 @@ void _assembleRequest(HttpClientRequest request, [String mimeType, Map<String, S
 }
 
 // concat url and query
-String _buildUrl(String url, String query) {
-    if (query == null || query.isEmpty) {
-        return url;
-    }
-    if (url.contains("?")) {
-        return '$url&$query';
-    } else {
-        return '$url?$query';
-    }
-}
+String _buildUrl(String url, String query) => (query == null || query.isEmpty) ? url : (url.contains("?") ?  '$url&$query' : '$url?$query');
 
 // map to query string
-String _buildQueryStr(Map<String, String> params) {
-    if (params == null) {
-        return null;
-    }
-    final queryList = <String>[];
-    params.forEach((key, name) => queryList.add('$key=$name'));
-    return queryList.join('&');
-}
+String _buildQueryStr(Map<String, String> params) => params == null ? null : mapOf(params).mapToList<String>((it) => "${it.key}=${it.value}").joinToString("&").toString();
