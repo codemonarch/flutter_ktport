@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
@@ -10,9 +11,7 @@ import 'package:ktflutter/set_extension.dart';
 import 'package:ktflutter/string_extension.dart';
 
 void main() {
-    test('reg', () {
-        var str = "rarnu1985gmail.com";
-        var ret = isEmail(str);
-        print("regTest: ret => $ret");
+    test('to', () {
+        
     });
 }

@@ -245,6 +245,7 @@ class KFList<E> extends ListBase<E> {
         }
         return ret;
     }
+
     KFMap<K, V> toMap<K, V>() {
         var ret = KFMap<K, V>();
         if (_innerList is List<KFPair<K, V>>) {
@@ -254,6 +255,52 @@ class KFList<E> extends ListBase<E> {
             }
         }
         return ret;
+    }
+
+    // mapTo
+    C mapTo<R, C extends List<R>>(C dest, R block(E obj)) {
+        for (var item in this) {
+            dest.add(block(item));
+        }
+        return dest;
+    }
+
+    // mapIndexedTo
+    C mapIndexedTo<R, C extends List<R>>(C dest, R block(int idx, E obj)) {
+        for (int i = 0; i < length; i++) {
+            dest.add(block(i, _innerList[i]));
+        }
+        return dest;
+    }
+
+    // filterTo
+    C filterTo<C extends List<E>>(C dest, bool block(E obj)) {
+        for (var item in this) {
+            if (block(item)) {
+                dest.add(item);
+            }
+        }
+        return dest;
+    }
+
+    // filterIndexedTo
+    C filterIndexedTo<C extends List<E>>(C dest, bool block(int idx, E obj)) {
+        for (int i = 0; i < length; i++) {
+            if (block(i, _innerList[i])) {
+                dest.add(_innerList[i]);
+            }
+        }
+        return dest;
+    }
+
+    // filterNotTo
+    C filterNotTo<C extends List<E>>(C dest, bool block(E obj)) {
+        for (var item in this) {
+            if (!block(item)) {
+                dest.add(item);
+            }
+        }
+        return dest;
     }
 }
 

@@ -110,6 +110,96 @@ class KFMap<K, V> extends MapBase<K, V> {
         _innerMap.removeWhere((k, v) => tmp[k] == v);
     }
 
+    // filterTo
+    KFMap<K, V> filterTo<M extends Map<K, V>>(M dest, bool block(MapEntry<K, V> e)) {
+        forEachEntry((it) {
+            if (block(it)) {
+                dest[it.key] = it.value;
+            }
+        });
+        return mapOf(dest);
+    }
+
+    // filterNotTo
+    KFMap<K, V> filterNotTo<M extends Map<K, V>>(M dest, bool block(MapEntry<K, V> e)) {
+        forEachEntry((it) {
+            if (!block(it)) {
+                dest[it.key] = it.value;
+            }
+        });
+        return mapOf(dest);
+    }
+
+    // filterKeysTo
+    KFMap<K, V> filterKeysTo<M extends Map<K, V>>(M dest, bool block(K k)) {
+        forEachEntry((it) {
+            if (block(it.key)) {
+                dest[it.key] = it.value;
+            }
+        });
+        return mapOf(dest);
+    }
+
+    // filterValuesTo
+    KFMap<K, V> filterValuesTo<M extends Map<K, V>>(M dest, bool block(V v)) {
+        forEachEntry((it) {
+            if (block(it.value)) {
+                dest[it.key] = it.value;
+            }
+        });
+        return mapOf(dest);
+    }
+
+    // mapTo
+    KFMap<K2, V2> mapTo<K2, V2, C extends Map<K2, V2>>(C dest, MapEntry<K2, V2> block(MapEntry<K, V> e)) {
+        forEachEntry((it) {
+            var item = block(it);
+            dest[item.key] = item.value;
+        });
+        return mapOf(dest);
+    }
+
+    // mapToListTo
+    KFList<R> mapToListTo<R, C extends List<R>>(C dest, R block(MapEntry<K, V> e)) {
+        forEachEntry((it) {
+            dest.add(block(it));
+        });
+        return listOf(dest);
+    }
+
+    // mapKeysTo
+    KFMap<K2, V2> mapKeysTo<K2, V2, C extends Map<K2, V2>>(C dest, MapEntry<K2, V2> block(K k)) {
+        forEachEntry((it) {
+            var item = block(it.key);
+            dest[item.key] = item.value;
+        });
+        return mapOf(dest);
+    }
+
+    // mapKeysToListTo
+    KFList<R> mapKeysToListTo<R, C extends List<R>>(C dest, R block(K k)) {
+        _innerMap.forEach((k, v) {
+            dest.add(block(k));
+        });
+        return listOf(dest);
+    }
+
+    // mapValuesTo
+    KFMap<K2, V2> mapValuesTo<K2, V2, C extends Map<K2, V2>>(C dest, MapEntry<K2, V2> block(V v)) {
+        forEachEntry((it) {
+            var item = block(it.value);
+            dest[item.key] = item.value;
+        });
+        return mapOf(dest);
+    }
+
+    // mapValuesToListTo
+    KFList<R> mapValuesToListTo<R, C extends List<R>>(C dest, R block(V v)) {
+        _innerMap.forEach((k, v) {
+            dest.add(block(v));
+        });
+        return listOf(dest);
+    }
 }
 
 KFMap<K, V> mapOf<K, V>(Map<K, V> map) => KFMap<K, V>().also((it) => it.addAll(map));

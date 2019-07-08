@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'list_extension.dart';
 import 'pair_extension.dart';
@@ -162,6 +163,16 @@ class KFString {
     int toInt() => int.parse(_innerString);
     double toDouble() => double.parse(_innerString);
     bool toBool() => _innerString.toLowerCase() == "true";
+
+    // ktor
+    // base64encode
+    KFString base64Encode() => stringOf(base64.encode(utf8.encode(_innerString)));
+
+    // base64decode
+    KFString base64decode() => stringOf(utf8.decode(base64.decode(_innerString)));
+
+    // toByteArray
+    KFList<int> toIntList() => map((it) => it.codeUnitAt(0));
 
     // rarnu
     KFString toJsonEncoded() => replaceAll("\\", "\\\\").replaceAll("\n", "\\n").replaceAll("\"", "\\\"");
