@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-void toast(BuildContext context, String message, [int duration = 2]) {
+toast(BuildContext context, String message, [int duration = 2]) {
     var overlayEntry = OverlayEntry(builder: (context) => Positioned(
         top: MediaQuery.of(context).size.height * 0.9,
         child: Material(

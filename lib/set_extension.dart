@@ -263,6 +263,52 @@ class KFSet<E> extends SetBase<E> {
         }
         return ret;
     }
+
+    // mapTo
+    C mapTo<R, C extends Set<R>>(C dest, R block(E obj)) {
+        for (var item in this) {
+            dest.add(block(item));
+        }
+        return dest;
+    }
+
+    // mapIndexedTo
+    C mapIndexedTo<R, C extends Set<R>>(C dest, R block(int idx, E obj)) {
+        for (int i = 0; i < length; i++) {
+            dest.add(block(i, _innerSet.elementAt(i)));
+        }
+        return dest;
+    }
+
+    // filterTo
+    C filterTo<C extends Set<E>>(C dest, bool block(E obj)) {
+        for (var item in this) {
+            if (block(item)) {
+                dest.add(item);
+            }
+        }
+        return dest;
+    }
+
+    // filterIndexedTo
+    C filterIndexedTo<C extends Set<E>>(C dest, bool block(int idx, E obj)) {
+        for (int i = 0; i < length; i++) {
+            if (block(i, _innerSet.elementAt(i))) {
+                dest.add(_innerSet.elementAt(i));
+            }
+        }
+        return dest;
+    }
+
+    // filterNotTo
+    C filterNotTo<C extends Set<E>>(C dest, bool block(E obj)) {
+        for (var item in this) {
+            if (!block(item)) {
+                dest.add(item);
+            }
+        }
+        return dest;
+    }
 }
 
 KFSet<E> setOf<E>(Iterable<E> set) => KFSet<E>().also((it) => it.addAll(set));

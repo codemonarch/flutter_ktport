@@ -7,7 +7,6 @@ enum DownloadState { Start, Progress, Complete, Error }
 
 typedef DownloadCallback = void Function(DownloadState state, int position, int filesize, String error);
 
-
 Future<bool> download(String url, String localFile, DownloadCallback callback) async {
 
     File fTmp = File(localFile);

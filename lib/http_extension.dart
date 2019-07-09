@@ -44,7 +44,6 @@ Future<HttpResponse> http(String url,
                 int timeout=15}) async {
     assert(url.isNotEmpty);
     Uri uri = Uri.parse(_buildUrl(url, _buildQueryStr(param)));
-
     try {
         HttpClient client = HttpClient();
         client.connectionTimeout = Duration(seconds: timeout);
@@ -61,25 +60,10 @@ Future<HttpResponse> http(String url,
 }
 
 // GET
-Future<HttpResponse> httpGet(String url, 
-                {Map<String, String> param,
-                Map<String, String> headers}) async {
-    return http(url, HttpMethod.GET,
-            param: param,
-            headers: headers);
-}
+Future<HttpResponse> httpGet(String url, {Map<String, String> param, Map<String, String> headers}) async => http(url, HttpMethod.GET, param: param, headers: headers);
 
 // POST
-Future<HttpResponse> httpPost(String url, 
-                {Map<String, String> param,
-                String body,
-                Map<String, String> headers}) async {
-    return http(url, 
-            HttpMethod.POST,
-            param: param,
-            body: body,
-            headers: headers);
-}
+Future<HttpResponse> httpPost(String url, {Map<String, String> param, String body, Map<String, String> headers}) async => http(url, HttpMethod.POST, param: param, body: body, headers: headers);
 
 // build HttpClientRequest
 Future<HttpClientRequest> _buildRequest(HttpClient client, Uri uri, HttpMethod method) async {
