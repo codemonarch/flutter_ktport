@@ -4,12 +4,12 @@ A flutter library for lazier programmers.
 
 ## Getting Started
 
-Add dependence of ```KTFlutter``` to your project. The last version is ```1.0.1``` .
+Add dependence of ```KTFlutter``` to your project. The last version is ```1.0.2``` .
 
 ```
 dependencies:
     ... ...
-    ktflutter: 1.0.1
+    ktflutter: 1.0.2
 ```
 
 ## Functions
